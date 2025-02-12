@@ -7,8 +7,28 @@ grep -E "\b[a-zA-Z_][a-zA-Z0-9_]*\b" folly/**/*.cpp
 # integral literals
 grep -E "\b(0[bB][01']+|[1-9][0-9']+|0[0-7']+|0[xX][0-9a-fA-F']+)([uU]?[lL]{0,2}|[lL]{0,2}[uU]?)\b" folly/**/*.cpp
 
+grep -E "\b([1-9][0-9']+)([uU]?[lL]{0,2}|[lL]{0,2}[uU]?)\b" folly/**/*.cpp
+
+grep -E "\b(0[bB][01']+)\b" folly/**/*.cpp
+
+grep -E "\b(0[0-7']+)\b" folly/**/*.cpp
+
+grep -E "\b0[xX][0-9a-fA-F']+\b" folly/**/*.cpp
+
 # directives
 grep -E "^\s*#\s*.*\s\b.*$" folly/**/*.cpp
 
+grep -E "^\s*#\s*(include|ifdef|if)\b" folly/**/*.cpp
+
+
 # strings
-grep -E "\b(L|LR|u8|u|U)?(\".*\")"
+grep -E "(L|u8|u|U)?(\".*\")" folly/**/*.cpp
+
+grep -E "R\"\(.*\)\""
+
+#fpl
+grep -E "([0-9]*\.[0-9]*)"
+
+grep -E "([0-9]*\.[0-9]*)([eE]{1}[+-]?[0-9]*)([lf])?"
+
+grep -E "0x[0-9a-fA-F]*\.[0-9a-fA-F]*p[0-9a-fA-F]+"

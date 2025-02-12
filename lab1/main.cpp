@@ -53,7 +53,9 @@ std::vector<std::pair<std::string, std::regex>> get_expressions() {
       {"Identyfiers", std::regex(R"(\b[a-zA-Z_][a-zA-Z0-9_]*\b)")},
       {"Integral literals",
        std::regex(
-           R"(\b(0[bB][01']+|[0-9']+|0[0-7']+|0[xX][0-9a-fA-F']+)([uU]?[lL]{0,2}|[lL]{0,2}[uU]?)\b)")}};
+           R"(\b(0[bB][01']+|[0-9']+|0[0-7']+|0[xX][0-9a-fA-F']+)([uU]?[lL]{0,2}|[lL]{0,2}[uU]?)\b)")},
+           {"Directives", std::regex(R"(^\s*#\s*.*\s\b.*$)")},
+           {"String literals", std::regex(R"((L|LR|u8|u|U)?(\".*\"))")}};
 }
 
 template <typename Iter>
