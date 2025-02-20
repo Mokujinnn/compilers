@@ -8,11 +8,13 @@ grep -E "\b[a-zA-Z_][a-zA-Z0-9_]*\b" folly/**/*.cpp
 
 grep -E "\b([1-9][0-9']+)([uU]?[lL]{0,2}|[lL]{0,2}[uU]?)\b" folly/**/*.cpp
 
-grep -E "\b(0[bB][01']+)\b" folly/**/*.cpp
+grep -E "(0[bB][01']+)" folly/**/*.cpp
 
-grep -E "\b(0[0-7']+)\b" folly/**/*.cpp
+grep -E "(0[0-7']+)" folly/**/*.cpp
 
-grep -E "\b0[xX][0-9a-fA-F']+\b" folly/**/*.cpp
+grep -E "0[xX][0-9a-fA-F']+" folly/**/*.cpp
+
+grep -E "[1-9][0-9']+[Zz]"
 
 # directives
 grep -E "^[ \t]*#[ \t]*(include|ifdef|if|define|undef)\b" folly/**/*.cpp
@@ -28,3 +30,5 @@ grep -E "([0-9']+[\.])" folly/**/*.cpp
 grep -E "[0-9']*[\.][0-9']+[eE][+-]?[0-9']*[lf]?" folly/**/*.cpp
 
 grep -E "0[xX][0-9a-fA-F']*\.[0-9a-fA-F']*[pP][0-9a-fA-F']+"
+
+grep -E "[0-9]+\.[0-9]+f64BF16"
