@@ -1,16 +1,54 @@
 #pragma once
 
 /* Token types */
-enum TokenType
+struct token
 {
+    enum
+    {
+        kw_class = 1,
+        kw_else,
+        kw_false,
+        kw_fi,
+        kw_if,
+        kw_in,
+        kw_inherits,
+        kw_isvoid,
+        kw_let,
+        kw_loop,
+        kw_pool,
+        kw_then,
+        kw_while,
+        kw_case,
+        kw_esac,
+        kw_new,
+        kw_of,
+        kw_not,
+        kw_true,
 
-    TOKEN_KW_class = 1,
-    TOKEN_KW_inherits,
+        bc_Object,
+        bc_Int,
+        bc_String,
+        bc_Bool,
 
-    TOKEN_identifier,
+        identifier,
 
-    TOKEN_LEFT_BRACES,
-    TOKEN_RIGHT_BRACES,
+        expr_assignment,
 
-    TOKEN_UNKNOWN,
+        binop_plus,
+        binop_minus,
+        binop_mul,
+        binop_div,
+        binop_l,
+        binop_le,
+        binop_eq,
+
+        l_brace,
+        r_brace,
+        l_paren,
+        r_paren,
+
+        lit_string,
+
+        UNKNOWN,
+    };
 };

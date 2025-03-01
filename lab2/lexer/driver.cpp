@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "CoolLexer.h"
+#include "Parser.h"
 
 int main(int argc, char **argv)
 {
@@ -22,7 +23,17 @@ int main(int argc, char **argv)
     CoolLexer *lexer = new CoolLexer(ifs, std::cout);
     for (int token = lexer->yylex(); token; token = lexer->yylex())
     {
-        std::cout << "Token: " << token << " '" << lexer->YYText() << "'\n";
+        if (token == token::lit_string)
+        {
+            std::cout << "Token: " << token << " \"" << lexer->get_string_buffer() << "\" "
+                      << "line:" << lexer->get_lineno() << '\n';
+            lexer->clear_string_buffer();
+        }
+        else
+        {
+            std::cout << "Token: " << token << " '" << lexer->YYText() << "' "
+                      << "line:" << lexer->get_lineno() << '\n';
+        }
     }
 
     delete lexer;
