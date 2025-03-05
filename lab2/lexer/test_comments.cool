@@ -5,8 +5,9 @@
 (*
  * Example app.
  *
- *)
+*)
  
 -- This is a class
 
-"String (* hello *)"
+"String (* hello *)
+

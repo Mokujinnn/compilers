@@ -7,10 +7,22 @@ class B {
         x+1
     };
 };
+
 class A inherits B {
     a : Int;
     b : B <- new B;
     f(x:Int) : Int {
         x+a
     };
+};
+
+class Silly {
+    copy() : SELF_TYPE { self };
+};
+
+class Sally inherits Silly { };
+
+class Main {
+x : Sally <- (new Sally).copy();
+    main() : Sally { x };
 };

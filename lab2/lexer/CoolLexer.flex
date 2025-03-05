@@ -49,7 +49,7 @@ lit_int           ({digit0}|{digit1}{digit0}*)
     \\t             {string_buf += "\t";}
     \\n             {string_buf += "\n"; ++lineno;}
     \\f             {string_buf += "\f";}
-    \\\n            {/* Игнорируем экранированный перевод строки */}
+    \\\n            {}
     \\[^\n]         {string_buf += yytext[1];}
     \"              {BEGIN(INITIAL); return token::lit_string;}
     \n              {Error("Unescaped newline in string");}
@@ -82,10 +82,10 @@ of                  {return token::kw_of;}
 not                 {return token::kw_not;}
 true                {return token::kw_true;}
 
-Object              {return token::bc_Object;}
-Int                 {return token::bc_Int;}
-String              {return token::bc_String;}
-Bool                {return token::bc_Bool;}
+Object              {return token::bo_Object;}
+Int                 {return token::bo_Int;}
+String              {return token::bo_String;}
+Bool                {return token::bo_Bool;}
 
 SELF_TYPE           {return token::self_type;}
 self                {return token::self;}
