@@ -1,7 +1,7 @@
 #pragma once
 
 /* Token types */
-struct token
+namespace token
 {
     enum
     {
@@ -32,6 +32,9 @@ struct token
 
         identifier,
 
+        self_type,
+        self,
+
         expr_assignment,
 
         binop_plus,
@@ -47,8 +50,14 @@ struct token
         l_paren,
         r_paren,
 
+        colon,
+        semicolon,
+        dot,
+        comma,
+
         lit_string,
+        lit_int,
 
         UNKNOWN,
     };
-};
+} // namespace token

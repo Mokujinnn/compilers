@@ -24,6 +24,7 @@ digit1            [1-9]
 alpha             [A-Za-z_]
 alpha_num         ({alpha}|{digit0})
 identifier        {alpha}{alpha_num}*
+lit_int           ({digit0}|{digit1}{digit0}*)
 
 %x COMMENT
 %x STRING
@@ -42,20 +43,22 @@ identifier        {alpha}{alpha_num}*
 }
 "*)"                {Error("Comment end without start");}
 
-\"                  {BEGIN(STRING);}  // Начало строки
+\"                  {BEGIN(STRING);}
 <STRING>{
-    \\b             {string_buf += "\b";}  // Обработка \b
-    \\t             {string_buf += "\t";}  // Обработка \t
-    \\n             {string_buf += "\n";}  // Обработка \n
-    \\f             {string_buf += "\f";}  // Обработка \f
+    \\b             {string_buf += "\b";}
+    \\t             {string_buf += "\t";}
+    \\n             {string_buf += "\n"; ++lineno;}
+    \\f             {string_buf += "\f";}
     \\\n            {/* Игнорируем экранированный перевод строки */}
-    \\[^\n]         {string_buf += yytext[1];}  // Обработка \c (любой символ после \)
-    \"              {BEGIN(INITIAL); return token::lit_string;}  // Конец строки
-    \n              {Error("Unescaped newline in string");}  // Запрет на неэкранированный \n
-    \0              {Error("Null character in string");}  // Запрет на \0
-    <<EOF>>         {Error("EOF in string");}  // Запрет на EOF
-    [^\\\n\"]+      {string_buf += yytext;}  // Обработка обычных символов
+    \\[^\n]         {string_buf += yytext[1];}
+    \"              {BEGIN(INITIAL); return token::lit_string;}
+    \n              {Error("Unescaped newline in string");}
+    \0              {Error("Null character in string");}
+    <<EOF>>         {Error("EOF in string");}
+    [^\\\n\"]+      {string_buf += yytext;}
 }
+
+{lit_int}           {return token::lit_int;}
 
 {white_space}       /*skip*/
 
@@ -84,6 +87,8 @@ Int                 {return token::bc_Int;}
 String              {return token::bc_String;}
 Bool                {return token::bc_Bool;}
 
+SELF_TYPE           {return token::self_type;}
+self                {return token::self;}
 
 {identifier}        {return token::identifier;}
 
@@ -103,6 +108,11 @@ Bool                {return token::bc_Bool;}
 "}"                 {return token::r_brace;}
 "("                 {return token::l_paren;}
 ")"                 {return token::r_paren;}
+
+":"                 {return token::colon;}
+";"                 {return token::semicolon;}
+"."                 {return token::dot;}
+","                 {return token::comma;}
 
 \n                  {lineno++;} 
 .                   {return token::UNKNOWN;}

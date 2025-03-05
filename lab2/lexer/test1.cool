@@ -7,10 +7,10 @@ class B {
         x+1
     };
 };
-(* class A inherits B {
+class A inherits B {
     a : Int;
-    b : B <- new B; *)
---    f(x:Int) : Int {
+    b : B <- new B;
+    f(x:Int) : Int {
         x+a
---    };
---};
+    };
+};
