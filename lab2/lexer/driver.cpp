@@ -20,7 +20,7 @@ int main(int argc, char **argv)
         std::exit(EXIT_FAILURE);
     }
 
-    CoolLexer *lexer = new CoolLexer(ifs, std::cout);
+    yyFlexLexer *lexer = new CoolLexer(ifs, std::cout);
     for (int token = lexer->yylex(); token; token = lexer->yylex())
     {
         if (token == token::lit_string)
