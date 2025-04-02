@@ -596,7 +596,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -8,     0,    -8,    -8,    -1,    -1,    -8,    -8,    14,    -8,
+      -8,     0,    -8,    -8,    -1,    -1,    -8,    -8,    14,    -7,
       23,    -1,    -1,    -1,    -1,    -1,    -8,    -8,    17,    17,
       -7,    -7,    -7
 };
@@ -1158,7 +1158,7 @@ yyreduce:
   case 10: /* expr: expr DIVIDE expr  */
 #line 41 "rpcalc.y"
                                    { 
-                                        if (yyvsp[0] == 0.0) {
+                                        if (fabs(yyvsp[0]) == 0.0) {
                                             yyerror("Division by zero");
                                             YYABORT;
                                         }
@@ -1415,7 +1415,6 @@ int yylex()
     return c;
 }
 
-/* Called by yyparse on error */
 void yyerror (char const *s)
 {
     fprintf (stderr, "Error: %s\n", s);

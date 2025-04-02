@@ -18,8 +18,8 @@ void yyerror(char const *);
 
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
+%precedence UMINUS 
 %right POWER
-%left UMINUS 
 
 %%
 
@@ -39,7 +39,7 @@ expr:
     | expr MINUS expr              { $$ = $1 - $3; }
     | expr MULTIPLY expr           { $$ = $1 * $3; }
     | expr DIVIDE expr             { 
-                                        if ($3 == 0.0) {
+                                        if (fabs($3) == 0.0) {
                                             yyerror("Division by zero");
                                             YYABORT;
                                         }
@@ -85,7 +85,6 @@ int yylex()
     return c;
 }
 
-/* Called by yyparse on error */
 void yyerror (char const *s)
 {
     fprintf (stderr, "Error: %s\n", s);

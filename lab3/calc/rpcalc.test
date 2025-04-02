@@ -59,3 +59,23 @@ cat >input <<EOF
 (2 ^ 2) ^ 3
 EOF
 run 0 64
+
+cat >input <<EOF
+-2 ^ 2
+EOF
+run 0 -4
+
+cat >input <<EOF
+-(2 ^ 2)
+EOF
+run 0 -4
+
+cat >input <<EOF
+(-2) ^ 2
+EOF
+run 0 4
+
+cat >input <<EOF
+-2
+EOF
+run 0 -2
