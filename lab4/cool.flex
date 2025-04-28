@@ -194,9 +194,10 @@ DIGIT           [0-9]
 
     /* TODO */
 
+    cool_yylval.symbol = stringtable.add_string(yytext);
+
     BEGIN 0;
     return STR_CONST;
-
 }
 
  /* ========
@@ -279,7 +280,7 @@ f(?i:alse) {
  /* TYPEID */
 [A-Z][A-Za-z0-9_]* {
     /* TODO*/
-    cool_yylval
+    cool_yylval.symbol = idtable.add_string(yytext);
     return TYPEID;
 }
 

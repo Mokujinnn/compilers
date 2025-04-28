@@ -21,10 +21,7 @@ Symbol copy_Symbol(const Symbol s)
 
 void dump_Symbol(std::ostream& s, int n, Symbol sym)
 {
-    if (sym)
-    {
-        s << pad(n) << sym << std::endl;
-    }    
+    s << pad(n) << sym << std::endl;
 }
 
 StringEntry::StringEntry(char *s, int l, int i) : Entry(s, l, i) { }

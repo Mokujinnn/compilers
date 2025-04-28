@@ -21,7 +21,7 @@ extern int cool_yyparse();
 
 int main(int argc, char **argv)
 {
-    yy_flex_debug = 1;
+    yy_flex_debug = 0;
     cool_yydebug = 0;
     lex_verbose  = 0;
 
@@ -42,6 +42,7 @@ int main(int argc, char **argv)
         /* TODO: dump AST tree (ast_root) to std::cerr */
 
         ast_root->dump(std::cerr, 0);
+        // ast_root->dump_with_types(std::cerr, 0);
 
         std::fclose(token_file);
     }
