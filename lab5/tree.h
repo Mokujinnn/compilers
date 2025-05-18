@@ -1,8 +1,8 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include <iostream>
 #include "stringtab.h"
+#include <iostream>
 
 extern int node_lineno;
 const char *pad(int n);
@@ -12,42 +12,154 @@ template <class Elem> class nil_node;
 template <class Elem> class single_list_node;
 template <class Elem> class append_node;
 
-class tree_node {
+class Visitor
+{
+public:
+    virtual void visit(class class__class &node)
+    {
+    }
+    virtual void visit(class method_class &node)
+    {
+    }
+    virtual void visit(class attr_class &node)
+    {
+    }
+    virtual void visit(class formal_class &node)
+    {
+    }
+    virtual void visit(class branch_class &node)
+    {
+    }
+    virtual void visit(class assign_class &node)
+    {
+    }
+    virtual void visit(class static_dispatch_class &node)
+    {
+    }
+    virtual void visit(class dispatch_class &node)
+    {
+    }
+    virtual void visit(class let_class &node)
+    {
+    }
+    virtual void visit(class new__class &node)
+    {
+    }
+    virtual void visit(class object_class &node)
+    {
+    }
+    virtual void visit(class block_class &node)
+    {
+    }
+    virtual void visit(class plus_class &node)
+    {
+    }
+    virtual void visit(class sub_class &node)
+    {
+    }
+    virtual void visit(class mul_class &node)
+    {
+    }
+    virtual void visit(class divide_class &node)
+    {
+    }
+    virtual void visit(class string_const_class &node)
+    {
+    }
+    virtual void visit(class bool_const_class &node)
+    {
+    }
+    virtual void visit(class int_const_class &node)
+    {
+    }
+    virtual void visit(class neg_class &node)
+    {
+    }
+    virtual void visit(class lt_class &node)
+    {
+    }
+    virtual void visit(class eq_class &node)
+    {
+    }
+    virtual void visit(class leq_class &node)
+    {
+    }
+    virtual void visit(class cond_class &node)
+    {
+    }
+    virtual ~Visitor() = default;
+};
+
+class tree_node
+{
 protected:
     // line number when node is created
     int line_number;
+
 public:
-    tree_node() { line_number = node_lineno; }
+    tree_node()
+    {
+        line_number = node_lineno;
+    }
     virtual tree_node *copy() = 0;
-    virtual ~tree_node() { }
+    virtual ~tree_node()
+    {
+    }
     virtual void dump(std::ostream &stream, int n) = 0;
-    int get_line_number() {	return line_number; }
-    tree_node *set(tree_node *t) { line_number = t->line_number; return this; }
+    int get_line_number()
+    {
+        return line_number;
+    }
+    tree_node *set(tree_node *t)
+    {
+        line_number = t->line_number;
+        return this;
+    }
+
+    virtual void accept(Visitor &v)
+    {
+    }
 };
 
 // Lists of objects
-template <class Elem>
-class list_node : public tree_node {
+template <class Elem> class list_node : public tree_node
+{
 public:
-    tree_node *copy() { return copy_list(); }
-    Elem nth(int n) {
+    tree_node *copy()
+    {
+        return copy_list();
+    }
+    Elem nth(int n)
+    {
         int len;
-        Elem tmp = nth_length(n ,len);
+        Elem tmp = nth_length(n, len);
         if (tmp)
-    	    return tmp;
-        else {
-	        std::cerr << "error: outside the range of the list\n";
-	        std::exit(1);
+            return tmp;
+        else
+        {
+            std::cerr << "error: outside the range of the list\n";
+            std::exit(1);
         }
     }
 
     // Iterator
-    int first() { return 0; }
-    int next(int n) { return n + 1; }
-    int more(int n) { return n < len(); }
+    int first()
+    {
+        return 0;
+    }
+    int next(int n)
+    {
+        return n + 1;
+    }
+    int more(int n)
+    {
+        return n < len();
+    }
 
     virtual list_node<Elem> *copy_list() = 0;
-    virtual ~list_node() { }
+    virtual ~list_node()
+    {
+    }
     virtual int len() = 0;
 
     // Returns the nth element of the list or NULL if there are not n elements.
@@ -55,62 +167,117 @@ public:
     virtual Elem nth_length(int n, int &len) = 0;
 
     // Construct an empty list
-    static list_node<Elem> *nil() { return new nil_node<Elem>(); }
+    static list_node<Elem> *nil()
+    {
+        return new nil_node<Elem>();
+    }
     // List of one element
-    static list_node<Elem> *single(Elem e) { return new single_list_node<Elem>(e); }
+    static list_node<Elem> *single(Elem e)
+    {
+        return new single_list_node<Elem>(e);
+    }
     // Append two lists
-    static list_node<Elem> *append(list_node<Elem> *l1,list_node<Elem> *l2) { return new append_node<Elem>(l1, l2); }
+    static list_node<Elem> *append(list_node<Elem> *l1, list_node<Elem> *l2)
+    {
+        return new append_node<Elem>(l1, l2);
+    }
 };
 
-template <class Elem>
-class nil_node : public list_node<Elem> {
+template <class Elem> class nil_node : public list_node<Elem>
+{
 public:
-    list_node<Elem> *copy_list() { return new nil_node<Elem>(); }
-    int len() { return 0; };
-    Elem nth_length(int n, int &len) { len = 0; return NULL; }
-    void dump(std::ostream &stream, int n) { stream << pad(n) << "(nil)\n"; }
+    list_node<Elem> *copy_list()
+    {
+        return new nil_node<Elem>();
+    }
+    int len()
+    {
+        return 0;
+    };
+    Elem nth_length(int n, int &len)
+    {
+        len = 0;
+        return NULL;
+    }
+    void dump(std::ostream &stream, int n)
+    {
+        stream << pad(n) << "(nil)\n";
+    }
 };
 
-template <class Elem>
-class single_list_node : public list_node<Elem> {
+template <class Elem> class single_list_node : public list_node<Elem>
+{
 private:
     Elem elem;
+
 public:
-    single_list_node(Elem t) : elem(t) { }
-    list_node<Elem> *copy_list() { return new single_list_node<Elem>((Elem)elem->copy()); }
-    int len() { return 1; };
-    Elem nth_length(int n, int &len) { len = 1; return (n ? NULL : elem); };
-    void dump(std::ostream &  stream, int n) { elem->dump(stream, n); };
+    single_list_node(Elem t)
+        : elem(t)
+    {
+    }
+    list_node<Elem> *copy_list()
+    {
+        return new single_list_node<Elem>((Elem)elem->copy());
+    }
+    int len()
+    {
+        return 1;
+    };
+    Elem nth_length(int n, int &len)
+    {
+        len = 1;
+        return (n ? NULL : elem);
+    };
+    void dump(std::ostream &stream, int n)
+    {
+        elem->dump(stream, n);
+    };
 };
 
-template <class Elem>
-class append_node : public list_node<Elem> {
+template <class Elem> class append_node : public list_node<Elem>
+{
 private:
     list_node<Elem> *some, *rest;
+
 public:
-    append_node(list_node<Elem> *l1, list_node<Elem> *l2) { some = l1; rest = l2; }
-    list_node<Elem> *copy_list() { return new append_node<Elem>(some->copy_list(), rest->copy_list()); }
-    int len() { return some->len() + rest->len(); }
-    Elem nth(int n) {
+    append_node(list_node<Elem> *l1, list_node<Elem> *l2)
+    {
+        some = l1;
+        rest = l2;
+    }
+    list_node<Elem> *copy_list()
+    {
+        return new append_node<Elem>(some->copy_list(), rest->copy_list());
+    }
+    int len()
+    {
+        return some->len() + rest->len();
+    }
+    Elem nth(int n)
+    {
         int len;
-        Elem tmp = nth_length(n ,len);
+        Elem tmp = nth_length(n, len);
         if (tmp)
-    	    return tmp;
-        else {
-	        std::cerr << "error: outside the range of the list\n";
-	        std::exit(1);
+            return tmp;
+        else
+        {
+            std::cerr << "error: outside the range of the list\n";
+            std::exit(1);
         }
     }
-    Elem nth_length(int n, int &len) {
+    Elem nth_length(int n, int &len)
+    {
         int rlen;
         Elem tmp = some->nth_length(n, len);
-        if (!tmp) {
-	        tmp = rest->nth_length(n - len, rlen);
-	        len += rlen;
+        if (!tmp)
+        {
+            tmp = rest->nth_length(n - len, rlen);
+            len += rlen;
         }
         return tmp;
     }
-    void dump(std::ostream &  stream, int n) {
+    void dump(std::ostream &stream, int n)
+    {
         int size = len();
         stream << pad(n) << "list\n";
         for (int i = 0; i < size; i++)
