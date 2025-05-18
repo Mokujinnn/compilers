@@ -1,6 +1,8 @@
 #include "cool-parse.h"
 #include "cool-tree.h"
+#include "semantic.h"
 #include "utilities.h"
+
 #include <cstdio>
 #include <unistd.h>
 
@@ -44,7 +46,9 @@ int main(int argc, char **argv)
 
         // ast_root->dump(std::cerr, 0);
 
-        // Perform semantic analysis
+        // Perform Semantic analysis
+        Semantic analizer(parse_results);
+        analizer.analysis();
 
         std::fclose(token_file);
     }

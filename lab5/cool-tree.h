@@ -178,6 +178,7 @@ public:
     Class_ copy_Class_();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -211,6 +212,7 @@ public:
     Feature copy_Feature();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -242,6 +244,7 @@ public:
     Feature copy_Feature();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -271,6 +274,7 @@ public:
     Formal copy_Formal();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -395,6 +399,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -534,6 +539,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -840,6 +846,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -867,6 +874,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -962,6 +970,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
