@@ -4,29 +4,32 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include "cool-tree.h"
 #include "cool-tree.handcode.h"
 #include "tree.h"
 
+struct SemanticContext
+{
+    int err_count{0};
+
+    const std::unordered_set<std::string> dont_inherit{"Bool", "Int", "String", "SELF_TYPE"};
+    std::unordered_set<std::string> classes_names{"Bool", "Int", "String", "SELF_TYPE", "Object"};
+
+    void error(std::string_view msg);
+};
+
 class Semantic
 {
-    using StringUSet = std::unordered_set<std::string>;
-    using StringUMap = std::unordered_map<std::string, std::string>;
 
 private:
-    Classes classes_;
-
-    int err_count_{0};
-
-    const StringUSet dont_inherit_{"Bool", "Int", "String", "SELF_TYPE"};
-    StringUSet classes_names_{"Bool", "Int", "String", "SELF_TYPE", "Object"};
+    program_class *ast_;
+    SemanticContext context_;
 
 private:
-    void error(std::string_view msg, int line);
-
-    void checkClassDuplicates(class__class *cls);
+    void checkClassDuplicates();
 
 public:
-    Semantic(Classes parse_result);
+    Semantic(program_class *ast);
     ~Semantic() = default;
 
     void analysis();

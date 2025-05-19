@@ -15,6 +15,9 @@ template <class Elem> class append_node;
 class Visitor
 {
 public:
+    virtual void visit(class program_class &node)
+    {
+    }
     virtual void visit(class class__class &node)
     {
     }

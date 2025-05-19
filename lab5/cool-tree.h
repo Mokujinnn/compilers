@@ -150,6 +150,12 @@ public:
     Program copy_Program();
     void dump(std::ostream &stream, int n);
 
+    friend class CheckClassDuplicatesVisior;
+    void accept(Visitor &v) override
+    {
+        v.visit(*this);
+    }
+
 #ifdef Program_SHARED_EXTRAS
     Program_SHARED_EXTRAS
 #endif
@@ -179,6 +185,7 @@ public:
     void dump(std::ostream &stream, int n);
 
     friend class GetNameVisitor;
+    friend class GetParentVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);

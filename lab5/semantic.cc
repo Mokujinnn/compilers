@@ -8,33 +8,35 @@
 using StringUSet = std::unordered_set<std::string>;
 using StringUMap = std::unordered_map<std::string, std::string>;
 
-Semantic::Semantic(Classes parse_result)
-    : classes_(parse_result)
+Semantic::Semantic(program_class *ast)
+    : ast_(ast)
 {
 }
 
-void Semantic::error(std::string_view msg, int line)
+void SemanticContext::error(std::string_view msg)
 {
-    std::cerr << "line: " << line << " semantic error: " << msg << '\n';
-    err_count_++;
+    std::cerr << "Semantic error: " << msg << '\n';
+    err_count++;
 }
 
-void Semantic::checkClassDuplicates(class__class *cls)
+void Semantic::checkClassDuplicates()
 {
-    auto class_name = GetNameVisitor::get(cls);
-    auto result = classes_names_.insert(class_name);
+    // for (int i = classes_->first(); classes_->more(i); i = classes_->next(i))
+    // {
+    //     class__class *current_class = dynamic_cast<class__class *>(classes_->nth(i));
+    //     auto class_name = GetNameVisitor::get(current_class);
+    //     auto result = context_.classes_names.insert(class_name);
 
-    if (!result.second)
-    {
-        error("class '" + class_name + "' already exist", cls->get_line_number());
-    }
+    //     if (!result.second)
+    //     {
+    //         error("class '" + class_name + "' already exist");
+    //     }
+    // }
 }
 
 void Semantic::analysis()
 {
-    for (int i = classes_->first(); classes_->more(i); i = classes_->next(i))
-    {
-        class__class *current_class = dynamic_cast<class__class *>(classes_->nth(i));
-        checkClassDuplicates(current_class);
-    }
+    CheckClassDuplicatesVisior check_duplicates(context_);
+
+    check_duplicates.visit(*ast_);
 }

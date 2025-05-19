@@ -47,7 +47,7 @@ int main(int argc, char **argv)
         // ast_root->dump(std::cerr, 0);
 
         // Perform Semantic analysis
-        Semantic analizer(parse_results);
+        Semantic analizer(dynamic_cast<program_class *>(ast_root));
         analizer.analysis();
 
         std::fclose(token_file);
