@@ -15,3 +15,10 @@ std::string GetParentVisitor::get(tree_node *node)
     node->accept(visitor);
     return visitor.name;
 }
+
+std::string GetExpressionTypeVisitor::get(tree_node *node)
+{
+    GetExpressionTypeVisitor visitor;
+    node->accept(visitor);
+    return visitor.type;
+}

@@ -160,6 +160,7 @@ public:
     friend class CheckUniqueFeaturesVisitor;
     friend class CheckUniqueFormalsVisitor;
     friend class InheritanceCheckerVisitor;
+    friend class TypeCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -199,6 +200,7 @@ public:
     friend class CheckUniqueFeaturesVisitor;
     friend class CheckUniqueFormalsVisitor;
     friend class InheritanceCheckerVisitor;
+    friend class TypeCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -236,6 +238,7 @@ public:
     friend class CheckClassMainVisitor;
     friend class CheckUniqueFeaturesVisitor;
     friend class CheckUniqueFormalsVisitor;
+    friend class TypeCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -269,6 +272,7 @@ public:
 
     friend class GetNameVisitor;
     friend class CheckUniqueFeaturesVisitor;
+    friend class TypeCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -300,6 +304,7 @@ public:
 
     friend class GetNameVisitor;
     friend class CheckUniqueFormalsVisitor;
+    friend class TypeCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -331,6 +336,7 @@ public:
     Case copy_Case();
     void dump(std::ostream &stream, int n);
 
+    friend class GetExpressionTypeVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -594,6 +600,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class TypeCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);

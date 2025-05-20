@@ -14,6 +14,7 @@ struct SemanticContext
 
     const std::unordered_set<std::string> dont_inherit{"Bool", "Int", "String", "SELF_TYPE"};
     std::unordered_set<std::string> classes_names{"Bool", "Int", "String", "SELF_TYPE", "Object"};
+    std::unordered_map<std::string, std::unordered_map<std::string, std::string>> methods_;
     std::unordered_map<std::string, std::string> classes_hierarchy_;
 
     void error(std::string_view msg);

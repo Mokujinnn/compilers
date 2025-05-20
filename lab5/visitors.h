@@ -5,6 +5,7 @@
 
 #include <functional>
 #include <string>
+#include <vector>
 
 class GetNameVisitor : public Visitor
 {
@@ -71,6 +72,115 @@ public:
     void visit(class__class &node) override
     {
         name = std::string(node.parent->get_string());
+    }
+};
+
+class GetExpressionTypeVisitor : public Visitor
+{
+public:
+    std::string type;
+
+    static std::string get(tree_node *node);
+
+public:
+    void visit(branch_class &node) override
+    {
+        type = "branch_class";
+    }
+
+    void visit(assign_class &node) override
+    {
+        type = "assign_class";
+    }
+
+    void visit(static_dispatch_class &node) override
+    {
+        type = "static_dispatch_class";
+    }
+
+    void visit(dispatch_class &node) override
+    {
+        type = "dispatch_class";
+    }
+
+    void visit(let_class &node) override
+    {
+        type = "let_class";
+    }
+
+    void visit(new__class &node) override
+    {
+        type = "new__class";
+    }
+
+    void visit(object_class &node) override
+    {
+        type = "object_class";
+    }
+
+    void visit(block_class &node) override
+    {
+        type = "block_class";
+    }
+
+    void visit(plus_class &node) override
+    {
+        type = "plus_class";
+    }
+
+    void visit(sub_class &node) override
+    {
+        type = "sub_class";
+    }
+
+    void visit(mul_class &node) override
+    {
+        type = "mul_class";
+    }
+
+    void visit(divide_class &node) override
+    {
+        type = "divide_class";
+    }
+
+    void visit(string_const_class &node) override
+    {
+        type = "string_const_class";
+    }
+
+    void visit(bool_const_class &node) override
+    {
+        type = "bool_const_class";
+    }
+
+    void visit(int_const_class &node) override
+    {
+        type = "int_const_class";
+    }
+
+    void visit(neg_class &node) override
+    {
+        type = "neg_class";
+    }
+
+    void visit(lt_class &node) override
+    {
+        type = "lt_class";
+    }
+
+    void visit(eq_class &node) override
+    {
+        type = "eq_class";
+    }
+
+    void visit(leq_class &node) override
+    {
+        type = "leq_class";
+    }
+
+    void visit(cond_class &node) override
+    {
+        type = "cond_class";
     }
 };
 
@@ -199,6 +309,8 @@ private:
 
     std::unordered_set<std::string> features_;
 
+    std::string current_class_name_;
+
 public:
     using Base::Base;
 
@@ -213,6 +325,9 @@ public:
 
     void visit(class__class &node) override
     {
+        current_class_name_ = GetNameVisitor::get(&node);
+
+        context_.methods_[current_class_name_] = {};
         features_.clear();
 
         auto *features = node.features;
@@ -227,6 +342,7 @@ public:
     {
         auto method_name = GetNameVisitor::get(&node);
         auto result = features_.insert(method_name);
+        context_.methods_[current_class_name_][method_name] = node.return_type->get_string();
 
         if (!result.second)
         {
@@ -383,5 +499,111 @@ public:
                            "'. Cannot inherit from '" + parent_name + "', class '" + parent_name +
                            "' dont defined");
         }
+    }
+};
+
+class TypeCheckerVisitor : public SemanticVisior
+{
+private:
+    using Base = SemanticVisior;
+
+    struct Scope
+    {
+        std::unordered_map<std::string, std::string> variables;
+    };
+
+    std::vector<Scope> scopes_;
+
+private:
+    void enter_scope()
+    {
+        scopes_.push_back(Scope{});
+    }
+
+    void exit_scope()
+    {
+        if (!scopes_.empty())
+        {
+            scopes_.pop_back();
+        }
+    }
+
+    bool add_var(const std::string &name, const std::string &type)
+    {
+        if (scopes_.empty())
+            return false;
+
+        if (scopes_.back().variables.count(name))
+            return false;
+
+        scopes_.back().variables.insert({name, type});
+        return true;
+    }
+
+    bool is_visible(const std::string &name)
+    {
+        for (auto it = scopes_.rbegin(); it != scopes_.rend(); ++it)
+        {
+            if (it->variables.count(name))
+                return true;
+        }
+        return false;
+    }
+
+public:
+    using Base::Base;
+
+    void visit(program_class &node) override
+    {
+        auto *classes = node.classes;
+        for (int i = classes->first(); classes->more(i); i = classes->next(i))
+        {
+            class__class *current_class = dynamic_cast<class__class *>(node.classes->nth(i));
+            current_class->accept(*this);
+        }
+    }
+
+    void visit(class__class &node) override
+    {
+        enter_scope();
+
+        auto *features = node.features;
+        for (int i = features->first(); features->more(i); i = features->next(i))
+        {
+            auto *feature = features->nth(i);
+            feature->accept(*this);
+        }
+
+        exit_scope();
+    }
+
+    void visit(method_class &node) override
+    {
+        enter_scope();
+
+        auto *formals = node.formals;
+        for (int i = formals->first(); formals->more(i); i = formals->next(i))
+        {
+            auto *formal = formals->nth(i);
+            formal->accept(*this);
+        }
+
+        node.expr->accept(*this);
+
+        exit_scope();
+    }
+
+    void visit(formal_class &node) override
+    {
+        add_var(GetNameVisitor::get(&node), node.type_decl->get_string());
+    }
+
+    void visit(attr_class &node) override
+    {
+    }
+
+    void visit(plus_class &node) override
+    {
+        node.e1.
     }
 };
