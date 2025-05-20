@@ -151,6 +151,7 @@ public:
     void dump(std::ostream &stream, int n);
 
     friend class CheckClassDuplicatesVisior;
+    friend class CheckClassMainVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -186,6 +187,7 @@ public:
 
     friend class GetNameVisitor;
     friend class GetParentVisitor;
+    friend class CheckClassMainVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -220,6 +222,7 @@ public:
     void dump(std::ostream &stream, int n);
 
     friend class GetNameVisitor;
+    friend class CheckClassMainVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);

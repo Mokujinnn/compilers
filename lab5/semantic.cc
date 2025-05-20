@@ -19,24 +19,11 @@ void SemanticContext::error(std::string_view msg)
     err_count++;
 }
 
-void Semantic::checkClassDuplicates()
-{
-    // for (int i = classes_->first(); classes_->more(i); i = classes_->next(i))
-    // {
-    //     class__class *current_class = dynamic_cast<class__class *>(classes_->nth(i));
-    //     auto class_name = GetNameVisitor::get(current_class);
-    //     auto result = context_.classes_names.insert(class_name);
-
-    //     if (!result.second)
-    //     {
-    //         error("class '" + class_name + "' already exist");
-    //     }
-    // }
-}
-
 void Semantic::analysis()
 {
     CheckClassDuplicatesVisior check_duplicates(context_);
+    CheckClassMainVisitor check_main(context_);
 
     check_duplicates.visit(*ast_);
+    check_main.visit(*ast_);
 }

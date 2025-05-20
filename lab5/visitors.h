@@ -113,3 +113,80 @@ public:
         }
     }
 };
+
+class CheckClassMainVisitor : public SemanticVisior
+{
+private:
+    using Base = SemanticVisior;
+
+    bool has_class_main_{false};
+    bool has_method_main_{false};
+
+public:
+    using Base::Base;
+
+    void visit(program_class &node) override
+    {
+        for (int i = node.classes->first(); node.classes->more(i); i = node.classes->next(i))
+        {
+            if (has_class_main_)
+            {
+                break;
+            }
+
+            class__class *current_class = dynamic_cast<class__class *>(node.classes->nth(i));
+            current_class->accept(*this);
+        }
+
+        if (!has_class_main_)
+        {
+            if (!has_method_main_)
+            {
+                context_.error("No class 'Main' with method 'main'");
+            }
+            else
+            {
+                context_.error("No class 'Main'");
+            }
+
+            has_class_main_ = false;
+            has_method_main_ = false;
+        }
+    }
+
+    void visit(class__class &node) override
+    {
+        auto class_name = GetNameVisitor::get(&node);
+
+        if (class_name == "Main")
+        {
+            has_class_main_ = true;
+            auto *features = node.features;
+
+            for (int i = features->first(); features->more(i); i = features->next(i))
+            {
+                auto *feature = features->nth(i);
+                if ((feature = dynamic_cast<method_class *>(feature)))
+                {
+                    feature->accept(*this);
+                }
+            }
+        }
+    }
+
+    void visit(method_class &node) override
+    {
+        auto method_name = GetNameVisitor::get(&node);
+
+        if (method_name == "main")
+        {
+            has_method_main_ = true;
+            auto *formals = node.formals;
+
+            if (formals->len() != 0)
+            {
+                context_.error("Method 'main' must have no parameters");
+            }
+        }
+    }
+};

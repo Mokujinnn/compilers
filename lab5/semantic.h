@@ -20,13 +20,9 @@ struct SemanticContext
 
 class Semantic
 {
-
 private:
     program_class *ast_;
     SemanticContext context_;
-
-private:
-    void checkClassDuplicates();
 
 public:
     Semantic(program_class *ast);
