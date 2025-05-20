@@ -159,6 +159,7 @@ public:
     friend class CheckClassMainVisitor;
     friend class CheckUniqueFeaturesVisitor;
     friend class CheckUniqueFormalsVisitor;
+    friend class InheritanceCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -197,6 +198,7 @@ public:
     friend class CheckClassMainVisitor;
     friend class CheckUniqueFeaturesVisitor;
     friend class CheckUniqueFormalsVisitor;
+    friend class InheritanceCheckerVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);

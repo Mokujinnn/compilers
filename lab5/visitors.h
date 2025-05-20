@@ -3,6 +3,7 @@
 #include "cool-tree.h"
 #include "semantic.h"
 
+#include <functional>
 #include <string>
 
 class GetNameVisitor : public Visitor
@@ -295,6 +296,89 @@ public:
         if (!result.second)
         {
             context_.error("formal '" + name + "' already exist");
+        }
+    }
+};
+
+class InheritanceCheckerVisitor : public SemanticVisior
+{
+private:
+    using Base = SemanticVisior;
+
+    void detect_cycle()
+    {
+        std::unordered_set<std::string> visited;
+        std::unordered_set<std::string> currently_visited;
+
+        std::function<bool(const std::string &)> dfs = [&](const std::string &class_name) {
+            if (visited.find(class_name) != visited.end())
+            {
+                return false;
+            }
+
+            if (currently_visited.find(class_name) != currently_visited.end())
+            {
+                return true;
+            }
+
+            currently_visited.insert(class_name);
+
+            auto it = context_.classes_hierarchy_.find(class_name);
+            if (it != context_.classes_hierarchy_.end())
+            {
+                if (dfs(it->second))
+                {
+                    return true;
+                }
+            }
+
+            visited.insert(class_name);
+            currently_visited.erase(class_name);
+            return false;
+        };
+
+        for (const auto &entry : context_.classes_hierarchy_)
+        {
+            if (dfs(entry.first))
+            {
+                context_.error("Find inheritance loop with 'class " + entry.first + " inherit " +
+                               entry.second + "'");
+            }
+        }
+    }
+
+public:
+    using Base::Base;
+
+    void visit(program_class &node) override
+    {
+        auto *classes = node.classes;
+        for (int i = classes->first(); classes->more(i); i = classes->next(i))
+        {
+            class__class *current_class = dynamic_cast<class__class *>(node.classes->nth(i));
+            current_class->accept(*this);
+        }
+
+        detect_cycle();
+    }
+
+    void visit(class__class &node) override
+    {
+        auto class_name = GetNameVisitor::get(&node);
+        auto parent_name = GetParentVisitor::get(&node);
+
+        context_.classes_hierarchy_[class_name] = parent_name;
+
+        if (context_.dont_inherit.find(parent_name) != context_.dont_inherit.end())
+        {
+            context_.error("class '" + class_name + "' inherit '" + parent_name +
+                           "'. Cannot inherit from builin types");
+        }
+        else if (context_.classes_names.find(parent_name) == context_.classes_names.end())
+        {
+            context_.error("class '" + class_name + "' inherit '" + parent_name +
+                           "'. Cannot inherit from '" + parent_name + "', class '" + parent_name +
+                           "' dont defined");
         }
     }
 };
