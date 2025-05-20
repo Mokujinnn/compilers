@@ -305,41 +305,44 @@ class InheritanceCheckerVisitor : public SemanticVisior
 private:
     using Base = SemanticVisior;
 
-    void detect_cycle()
+    using StringUSet = std::unordered_set<std::string>;
+
+    bool dfs(const std::string &class_name, StringUSet visited, StringUSet currently_visited)
     {
-        std::unordered_set<std::string> visited;
-        std::unordered_set<std::string> currently_visited;
+        if (visited.find(class_name) != visited.end())
+        {
+            return false;
+        }
 
-        std::function<bool(const std::string &)> dfs = [&](const std::string &class_name) {
-            if (visited.find(class_name) != visited.end())
-            {
-                return false;
-            }
+        if (currently_visited.find(class_name) != currently_visited.end())
+        {
+            return true;
+        }
 
-            if (currently_visited.find(class_name) != currently_visited.end())
+        currently_visited.insert(class_name);
+
+        auto it = context_.classes_hierarchy_.find(class_name);
+        if (it != context_.classes_hierarchy_.end())
+        {
+            if (dfs(it->second, visited, currently_visited))
             {
                 return true;
             }
+        }
 
-            currently_visited.insert(class_name);
+        visited.insert(class_name);
+        currently_visited.erase(class_name);
+        return false;
+    }
 
-            auto it = context_.classes_hierarchy_.find(class_name);
-            if (it != context_.classes_hierarchy_.end())
-            {
-                if (dfs(it->second))
-                {
-                    return true;
-                }
-            }
-
-            visited.insert(class_name);
-            currently_visited.erase(class_name);
-            return false;
-        };
+    void detect_cycle()
+    {
+        StringUSet visited;
+        StringUSet currently_visited;
 
         for (const auto &entry : context_.classes_hierarchy_)
         {
-            if (dfs(entry.first))
+            if (dfs(entry.first, visited, currently_visited))
             {
                 context_.error("Find inheritance loop with 'class " + entry.first + " inherit " +
                                entry.second + "'");
