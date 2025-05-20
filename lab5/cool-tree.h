@@ -58,6 +58,11 @@ public:
     }
     virtual Feature copy_Feature() = 0;
 
+    void accept(Visitor &v) override
+    {
+        v.visit(*this);
+    }
+
 #ifdef Feature_EXTRAS
     Feature_EXTRAS
 #endif
@@ -152,6 +157,7 @@ public:
 
     friend class CheckClassDuplicatesVisior;
     friend class CheckClassMainVisitor;
+    friend class CheckUniqueFeaturesVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -188,6 +194,7 @@ public:
     friend class GetNameVisitor;
     friend class GetParentVisitor;
     friend class CheckClassMainVisitor;
+    friend class CheckUniqueFeaturesVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -223,6 +230,7 @@ public:
 
     friend class GetNameVisitor;
     friend class CheckClassMainVisitor;
+    friend class CheckUniqueFeaturesVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -255,6 +263,7 @@ public:
     void dump(std::ostream &stream, int n);
 
     friend class GetNameVisitor;
+    friend class CheckUniqueFeaturesVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);

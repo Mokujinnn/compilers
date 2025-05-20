@@ -190,3 +190,57 @@ public:
         }
     }
 };
+
+class CheckUniqueFeaturesVisitor : public SemanticVisior
+{
+private:
+    using Base = SemanticVisior;
+
+    std::unordered_set<std::string> features_;
+
+public:
+    using Base::Base;
+
+    void visit(program_class &node) override
+    {
+        for (int i = node.classes->first(); node.classes->more(i); i = node.classes->next(i))
+        {
+            class__class *current_class = dynamic_cast<class__class *>(node.classes->nth(i));
+            current_class->accept(*this);
+        }
+    }
+
+    void visit(class__class &node) override
+    {
+        features_.clear();
+
+        auto *features = node.features;
+        for (int i = features->first(); features->more(i); i = features->next(i))
+        {
+            auto *feature = features->nth(i);
+            feature->accept(*this);
+        }
+    }
+
+    void visit(method_class &node) override
+    {
+        auto method_name = GetNameVisitor::get(&node);
+        auto result = features_.insert(method_name);
+
+        if (!result.second)
+        {
+            context_.error("feature '" + method_name + "' already exist");
+        }
+    }
+
+    void visit(attr_class &node) override
+    {
+        auto attr_name = GetNameVisitor::get(&node);
+        auto result = features_.insert(attr_name);
+
+        if (!result.second)
+        {
+            context_.error("feature '" + attr_name + "' already exist");
+        }
+    }
+};

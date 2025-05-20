@@ -21,6 +21,9 @@ public:
     virtual void visit(class class__class &node)
     {
     }
+    virtual void visit(class Feature_class &node)
+    {
+    }
     virtual void visit(class method_class &node)
     {
     }
