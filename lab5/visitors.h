@@ -184,6 +184,69 @@ public:
     }
 };
 
+class GetExpressionVisitor : public Visitor
+{
+public:
+    Expressions exprs = nullptr;
+
+    static std::string get(tree_node *node);
+
+public:
+    void visit(block_class &node) override
+    {
+        exprs = node.body;
+    }
+
+    void visit(plus_class &node) override
+    {
+        Expressions e1 = new single_list_node<Expression>(node.e1);
+        Expressions e2 = new single_list_node<Expression>(node.e2);
+        exprs = new append_node<Expression>(e1, e2);
+    }
+
+    void visit(sub_class &node) override
+    {
+        Expressions e1 = new single_list_node<Expression>(node.e1);
+        Expressions e2 = new single_list_node<Expression>(node.e2);
+        exprs = new append_node<Expression>(e1, e2);
+    }
+
+    void visit(mul_class &node) override
+    {
+        Expressions e1 = new single_list_node<Expression>(node.e1);
+        Expressions e2 = new single_list_node<Expression>(node.e2);
+        exprs = new append_node<Expression>(e1, e2);
+    }
+
+    void visit(divide_class &node) override
+    {
+        Expressions e1 = new single_list_node<Expression>(node.e1);
+        Expressions e2 = new single_list_node<Expression>(node.e2);
+        exprs = new append_node<Expression>(e1, e2);
+    }
+
+    void visit(lt_class &node) override
+    {
+        Expressions e1 = new single_list_node<Expression>(node.e1);
+        Expressions e2 = new single_list_node<Expression>(node.e2);
+        exprs = new append_node<Expression>(e1, e2);
+    }
+
+    void visit(eq_class &node) override
+    {
+        Expressions e1 = new single_list_node<Expression>(node.e1);
+        Expressions e2 = new single_list_node<Expression>(node.e2);
+        exprs = new append_node<Expression>(e1, e2);
+    }
+
+    void visit(leq_class &node) override
+    {
+        Expressions e1 = new single_list_node<Expression>(node.e1);
+        Expressions e2 = new single_list_node<Expression>(node.e2);
+        exprs = new append_node<Expression>(e1, e2);
+    }
+};
+
 class SemanticVisior : public Visitor
 {
 protected:
@@ -550,6 +613,12 @@ private:
         return false;
     }
 
+private:
+    void arithmetic_op(Expression_class &node)
+    {
+        auto str = GetExpressionTypeVisitor::get(&node);
+    }
+
 public:
     using Base::Base;
 
@@ -604,6 +673,5 @@ public:
 
     void visit(plus_class &node) override
     {
-        node.e1.
     }
 };
