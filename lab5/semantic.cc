@@ -24,8 +24,10 @@ void Semantic::analysis()
     CheckClassDuplicatesVisior check_duplicates(context_);
     CheckClassMainVisitor check_main(context_);
     CheckUniqueFeaturesVisitor check_features(context_);
+    CheckUniqueFormalsVisitor check_formals(context_);
 
     check_duplicates.visit(*ast_);
     check_main.visit(*ast_);
     check_features.visit(*ast_);
+    check_formals.visit(*ast_);
 }

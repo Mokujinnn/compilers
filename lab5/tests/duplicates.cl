@@ -2,7 +2,7 @@ class Main {
     a : Int;
     a : Int; -- class field duplicate
 
-    main(b : Int): Int {
+    main(b : Int, b : Int): Int {
         {
             let b: Int <- 4 in false; -- class field override
             10;

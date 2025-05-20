@@ -158,6 +158,7 @@ public:
     friend class CheckClassDuplicatesVisior;
     friend class CheckClassMainVisitor;
     friend class CheckUniqueFeaturesVisitor;
+    friend class CheckUniqueFormalsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -195,6 +196,7 @@ public:
     friend class GetParentVisitor;
     friend class CheckClassMainVisitor;
     friend class CheckUniqueFeaturesVisitor;
+    friend class CheckUniqueFormalsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -231,6 +233,7 @@ public:
     friend class GetNameVisitor;
     friend class CheckClassMainVisitor;
     friend class CheckUniqueFeaturesVisitor;
+    friend class CheckUniqueFormalsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -294,6 +297,7 @@ public:
     void dump(std::ostream &stream, int n);
 
     friend class GetNameVisitor;
+    friend class CheckUniqueFormalsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);

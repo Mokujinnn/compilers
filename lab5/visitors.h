@@ -244,3 +244,57 @@ public:
         }
     }
 };
+
+class CheckUniqueFormalsVisitor : public SemanticVisior
+{
+private:
+    using Base = SemanticVisior;
+
+    std::unordered_set<std::string> formals_;
+
+public:
+    using Base::Base;
+
+    void visit(program_class &node) override
+    {
+        auto *classes = node.classes;
+        for (int i = classes->first(); classes->more(i); i = classes->next(i))
+        {
+            class__class *current_class = dynamic_cast<class__class *>(node.classes->nth(i));
+            current_class->accept(*this);
+        }
+    }
+
+    void visit(class__class &node) override
+    {
+        auto *features = node.features;
+        for (int i = features->first(); features->more(i); i = features->next(i))
+        {
+            auto *feature = features->nth(i);
+            feature->accept(*this);
+        }
+    }
+
+    void visit(method_class &node) override
+    {
+        formals_.clear();
+
+        auto *formals = node.formals;
+        for (int i = formals->first(); formals->more(i); i = formals->next(i))
+        {
+            auto *formal = formals->nth(i);
+            formal->accept(*this);
+        }
+    }
+
+    void visit(formal_class &node) override
+    {
+        auto name = GetNameVisitor::get(&node);
+        auto result = formals_.insert(name);
+
+        if (!result.second)
+        {
+            context_.error("formal '" + name + "' already exist");
+        }
+    }
+};
