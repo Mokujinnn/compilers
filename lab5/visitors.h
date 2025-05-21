@@ -187,9 +187,39 @@ public:
 class GetExpressionVisitor : public Visitor
 {
 public:
+    Expression expr = nullptr;
+
+    static Expression get(tree_node *node);
+
+public:
+    void visit(method_class &node) override
+    {
+        expr = node.expr;
+    }
+    void visit(attr_class &node) override
+    {
+        expr = node.init;
+    }
+    void visit(let_class &node) override
+    {
+        expr = node.init;
+    }
+    void visit(neg_class &node) override
+    {
+        expr = node.e1;
+    }
+    void visit(cond_class &node) override
+    {
+        expr = node.pred;
+    }
+};
+
+class GetExpressionsVisitor : public Visitor
+{
+public:
     Expressions exprs = nullptr;
 
-    static std::string get(tree_node *node);
+    static Expressions get(tree_node *node);
 
 public:
     void visit(block_class &node) override
@@ -614,9 +644,57 @@ private:
     }
 
 private:
+    // void check_builtin_types_init(std::string type, Expression expr)
+    // {
+    //     std::string expr_type = GetExpressionTypeVisitor::get(expr);
+
+    //     if (expr_type == "no_expr_class")
+    //     {
+    //         return;
+    //     }
+    //     if (type == "Int" && expr_type != "int_const_class")
+    //     {
+    //         context_.error("initialization of Int with non-integer value");
+    //     }
+    //     else if (type == "Bool" && expr_type != "bool_const_class")
+    //     {
+    //         context_.error("initialization of Bool with non-boolean value");
+    //     }
+    //     else if (type == "String" && expr_type != "string_const_class")
+    //     {
+    //         context_.error("initialization of String with non-string value");
+    //     }
+    // }
+
     void arithmetic_op(Expression_class &node)
     {
-        auto str = GetExpressionTypeVisitor::get(&node);
+        Expressions exprs = GetExpressionsVisitor::get(&node);
+        for (int i = exprs->first(); exprs->more(i); i = exprs->next(i))
+        {
+            Expression e = exprs->nth(i);
+            auto type = GetExpressionTypeVisitor::get(e);
+            auto name = GetNameVisitor::get(e);
+
+            bool int_const_check = type == "int_const_class" || type == "plus_class" ||
+                                   type == "sub_class" || type == "mul_class" ||
+                                   type == "divide_class";
+            bool static_dispatch_check = type == "static_dispatch_class" && type == "Int";
+
+            bool dispatch_check = type == "dispatch_class";
+            for (auto &[_, map] : context_.methods_)
+            {
+                if (map[name] == "Int")
+                {
+                    dispatch_check &= true;
+                }
+            }
+
+            bool object_check = type == "object_class" && is_visible(name);
+            if (!int_const_check && !static_dispatch_check && !dispatch_check && !object_check)
+            {
+                context_.error("non-integer " + type + " '" + name + "' in arithmetic operation");
+            }
+        }
     }
 
 public:
@@ -637,6 +715,15 @@ public:
         enter_scope();
 
         auto *features = node.features;
+        for (int i = features->first(); features->more(i); i = features->next(i))
+        {
+            attr_class *feature = dynamic_cast<attr_class *>(features->nth(i));
+            if (feature)
+            {
+                add_var(GetNameVisitor::get(feature), feature->type_decl->get_string());
+            }
+        }
+
         for (int i = features->first(); features->more(i); i = features->next(i))
         {
             auto *feature = features->nth(i);
@@ -669,9 +756,34 @@ public:
 
     void visit(attr_class &node) override
     {
+        node.init->accept(*this);
     }
 
     void visit(plus_class &node) override
     {
+        arithmetic_op(node);
+        node.e1->accept(*this);
+        node.e2->accept(*this);
+    }
+
+    void visit(sub_class &node) override
+    {
+        arithmetic_op(node);
+        node.e1->accept(*this);
+        node.e2->accept(*this);
+    }
+
+    void visit(mul_class &node) override
+    {
+        arithmetic_op(node);
+        node.e1->accept(*this);
+        node.e2->accept(*this);
+    }
+
+    void visit(divide_class &node) override
+    {
+        arithmetic_op(node);
+        node.e1->accept(*this);
+        node.e2->accept(*this);
     }
 };

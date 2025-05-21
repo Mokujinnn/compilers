@@ -34,4 +34,9 @@ void Semantic::analysis()
     check_formals.visit(*ast_);
     inheritance_check.visit(*ast_);
     type_check.visit(*ast_);
+
+    if (context_.err_count > 0)
+    {
+        std::cerr << "Detected " << context_.err_count << " semantic errors\n";
+    }
 }

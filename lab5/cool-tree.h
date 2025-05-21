@@ -234,6 +234,7 @@ public:
     Feature copy_Feature();
     void dump(std::ostream &stream, int n);
 
+    friend class GetExpressionVisitor;
     friend class GetNameVisitor;
     friend class CheckClassMainVisitor;
     friend class CheckUniqueFeaturesVisitor;
@@ -270,6 +271,7 @@ public:
     Feature copy_Feature();
     void dump(std::ostream &stream, int n);
 
+    friend class GetExpressionVisitor;
     friend class GetNameVisitor;
     friend class CheckUniqueFeaturesVisitor;
     friend class TypeCheckerVisitor;
@@ -462,6 +464,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetExpressionVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -537,7 +540,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
-    friend class GetExpressionVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -571,6 +574,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetExpressionVisitor;
     friend class GetNameVisitor;
     void accept(Visitor &v) override
     {
@@ -602,7 +606,7 @@ public:
     void dump(std::ostream &stream, int n);
 
     friend class TypeCheckerVisitor;
-    friend class GetExpressionVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -632,7 +636,8 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
-    friend class GetExpressionVisitor;
+    friend class TypeCheckerVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -662,7 +667,8 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
-    friend class GetExpressionVisitor;
+    friend class TypeCheckerVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -692,7 +698,8 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
-    friend class GetExpressionVisitor;
+    friend class TypeCheckerVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -720,6 +727,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
+    friend class GetExpressionVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -749,7 +757,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
-    friend class GetExpressionVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -779,7 +787,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
-    friend class GetExpressionVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);
@@ -809,7 +817,7 @@ public:
     Expression copy_Expression();
     void dump(std::ostream &stream, int n);
 
-    friend class GetExpressionVisitor;
+    friend class GetExpressionsVisitor;
     void accept(Visitor &v) override
     {
         v.visit(*this);

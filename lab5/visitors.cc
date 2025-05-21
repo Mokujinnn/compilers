@@ -22,3 +22,17 @@ std::string GetExpressionTypeVisitor::get(tree_node *node)
     node->accept(visitor);
     return visitor.type;
 }
+
+Expressions GetExpressionsVisitor::get(tree_node *node)
+{
+    GetExpressionsVisitor visitor;
+    node->accept(visitor);
+    return visitor.exprs;
+}
+
+Expression GetExpressionVisitor::get(tree_node *node)
+{
+    GetExpressionVisitor visitor;
+    node->accept(visitor);
+    return visitor.expr;
+}
