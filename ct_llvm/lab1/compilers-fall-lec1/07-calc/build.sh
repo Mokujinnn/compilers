@@ -2,7 +2,7 @@
 
 mkdir build
 cd build
-cmake ..
+cmake .. -DLLVM_DIR='/home/maxim/llvm-install/lib/cmake/llvm'
 make
 
 cd ..

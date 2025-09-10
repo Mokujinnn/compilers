@@ -33,4 +33,5 @@
 
 # IDE
 .vscode
-
+**/build
+ct_llvm/lab1/compilers-fall-lec1/07-calc/tools/calc

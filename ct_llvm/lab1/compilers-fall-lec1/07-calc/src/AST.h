@@ -27,6 +27,8 @@ class AST {
 public:
   virtual ~AST() {}
   virtual void accept(ASTVisitor &V) = 0;
+
+  virtual bool isFactor() {return false;}
 };
 
 class Expr : public AST {
@@ -55,6 +57,8 @@ public:
   virtual void accept(ASTVisitor &V) override {
     V.visit(*this);
   }
+
+  virtual bool isFactor() override {return true;}
 };
 
 class BinaryOp : public Expr {

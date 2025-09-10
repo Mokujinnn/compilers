@@ -30,6 +30,20 @@ public:
   };
 
   virtual void visit(BinaryOp &Node) override {
+
+    if (Node.getOperator() == BinaryOp::Div) {
+        if (Node.getRight() && Node.getRight()->isFactor()) {
+            Factor *RightFactor = static_cast<Factor*>(Node.getRight());
+            
+            if (RightFactor->getKind() == Factor::Number) {
+                if (RightFactor->getVal() == "0") {
+                    HasError = true;
+                    llvm::errs() << "Division by zero\n";
+                }
+            }
+        }
+    }
+
     if (Node.getLeft())
       Node.getLeft()->accept(*this);
     else
