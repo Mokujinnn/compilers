@@ -289,6 +289,21 @@ public:
   }
 };
 
+class StringLiteral : public Expr {
+  SMLoc Loc;
+  llvm::APSInt Value;
+
+public:
+  StringLiteral(SMLoc Loc, const llvm::APSInt &Value,
+                 TypeDeclaration *Ty)
+      : Expr(EK_Int, Ty, true), Loc(Loc), Value(Value) {}
+  llvm::APSInt &getValue() { return Value; }
+
+  static bool classof(const Expr *E) {
+    return E->getKind() == EK_Int;
+  }
+};
+
 class BooleanLiteral : public Expr {
   bool Value;
 

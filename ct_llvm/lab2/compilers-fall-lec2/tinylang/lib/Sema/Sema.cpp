@@ -63,16 +63,18 @@ void Sema::initialize() {
   // Setup global scope.
   CurrentScope = new Scope();
   CurrentDecl = nullptr;
+  StringType = new TypeDeclaration(CurrentDecl, SMLoc(), "STRING");
   IntegerType =
-      new TypeDeclaration(CurrentDecl, SMLoc(), "INTEGER");
+  new TypeDeclaration(CurrentDecl, SMLoc(), "INTEGER");
   BooleanType =
-      new TypeDeclaration(CurrentDecl, SMLoc(), "BOOLEAN");
+  new TypeDeclaration(CurrentDecl, SMLoc(), "BOOLEAN");
   TrueLiteral = new BooleanLiteral(true, BooleanType);
   FalseLiteral = new BooleanLiteral(false, BooleanType);
   TrueConst = new ConstantDeclaration(CurrentDecl, SMLoc(),
-                                      "TRUE", TrueLiteral);
+  "TRUE", TrueLiteral);
   FalseConst = new ConstantDeclaration(
-      CurrentDecl, SMLoc(), "FALSE", FalseLiteral);
+    CurrentDecl, SMLoc(), "FALSE", FalseLiteral);
+  CurrentScope->insert(StringType);
   CurrentScope->insert(IntegerType);
   CurrentScope->insert(BooleanType);
   CurrentScope->insert(TrueConst);

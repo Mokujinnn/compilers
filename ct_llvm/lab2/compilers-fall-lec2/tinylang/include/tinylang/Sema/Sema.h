@@ -26,6 +26,7 @@ class Sema {
 
   TypeDeclaration *IntegerType;
   TypeDeclaration *BooleanType;
+  TypeDeclaration *StringType;
   BooleanLiteral *TrueLiteral;
   BooleanLiteral *FalseLiteral;
   ConstantDeclaration *TrueConst;
@@ -89,6 +90,19 @@ public:
   Expr *actOnFunctionCall(Decl *D, ExprList &Params);
   Decl *actOnQualIdentPart(Decl *Prev, SMLoc Loc,
                            StringRef Name);
+
+
+  Expr *actOnStringLiteral(SMLoc Loc,
+                                StringRef Literal) {
+  uint8_t Radix = 10;
+  if (Literal.ends_with("H")) {
+    Literal = Literal.drop_back();
+    Radix = 16;
+  }
+  llvm::APInt Value(64, Literal, Radix);
+  return new IntegerLiteral(Loc, llvm::APSInt(Value, false),
+                            StringType);
+};
 };
 
 class EnterDeclScope {

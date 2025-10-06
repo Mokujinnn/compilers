@@ -595,6 +595,9 @@ bool Parser::parseFactor(Expr *&E) {
     E = Actions.actOnIntegerLiteral(Tok.getLocation(),
                                     Tok.getLiteralData());
     advance();
+  } else if (Tok.is(tok::string_literal)){
+    E = Actions.actOnStringLiteral(Tok.getLocation(),
+                                    Tok.getLiteralData());
   } else if (Tok.is(tok::identifier)) {
     Decl *D;
     ExprList Exprs;
